@@ -1,0 +1,39 @@
+<div class="compareSection" *ngIf="compareData">
+    <div class="score">Score: {{compareData.score}} </div>
+    <div *ngIf="compareData.suggestions && compareData.suggestions.length > 0">
+        <h4>Suggestions</h4>
+        <ul class="compareSuggestions wordList" *ngIf="compareData.suggestions">
+            <li class="suggestion word" *ngFor="let suggestion of compareData.suggestions | slice:0:(displayAllSuggestions ? compareData.suggestions.length : min(compareData.suggestions.length, maxDisplay))" >{{ suggestion }}</li>
+        </ul>
+        <button *ngIf="!displayAllSuggestions && compareData.suggestions.length >= maxDisplay" (click)="toggleSuggestions()">
+            Show All
+        </button>
+    </div>
+    <div *ngIf="compareData.intersection && compareData.intersection.length > 0">
+        <h4>Intersection</h4>
+        <ul class="compareIntersection wordList" *ngIf="compareData.intersection">
+            <li class="intersection word" *ngFor="let intersection of compareData.intersection | slice:0:(displayAllIntersection ? compareData.intersection.length : min(compareData.intersection.length, maxDisplay))" >{{ intersection }}</li>
+        </ul>
+        <button *ngIf="!displayAllIntersection && compareData.intersection.length >= maxDisplay" (click)="toggleIntersection()">
+            Show All
+        </button>
+    </div>
+    <div *ngIf="compareData.resumeOnly && compareData.resumeOnly.length > 0">
+        <h4>Resume Only</h4>
+        <ul class="compareResumeOnly wordList">
+            <li class="resumeOnly word" *ngFor="let resumeOnly of compareData.resumeOnly | slice:0:(displayAllResume ? compareData.resumeOnly.length : min(compareData.resumeOnly.length, maxDisplay))">{{ resumeOnly }}</li>
+        </ul>
+        <button *ngIf="!displayAllResume && compareData.resumeOnly.length >= maxDisplay" (click)="toggleResume()">
+            Show All
+        </button>
+    </div>
+    <div *ngIf="compareData.postOnly && compareData.postOnly.length > 0">
+        <h4>Post Only</h4>
+        <ul class="comparePostOnly wordList">
+            <li class="postOnly word" *ngFor="let postOnly of compareData.postOnly | slice:0:(displayAllPost ? compareData.postOnly.length : min(compareData.postOnly.length, maxDisplay))">{{ postOnly }}</li>
+        </ul>
+        <button *ngIf="!displayAllPost && compareData.postOnly.length >= maxDisplay" (click)="togglePost()">
+            Show All
+        </button>
+    </div>
+</div>

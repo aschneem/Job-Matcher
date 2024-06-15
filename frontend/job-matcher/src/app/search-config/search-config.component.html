@@ -1,0 +1,30 @@
+<h2>Searches</h2>
+<div class="searchContentContainer">
+    <app-file-upload (fileUploaded)="uploadResume($event)"></app-file-upload>
+    <div>
+        <button type="button" (click)="runAllSearches()">
+            Run All
+        </button>
+    </div>
+    <ul class="searchList">
+        <li class="searchEntry" *ngFor="let search of searches">
+            <div class="searchName searchDetail">{{search.name | uppercase}}</div>
+            <div class="searchStatus searchDetail" [class.completed]="search?.runData?.search_status === 'complete'">Status {{search?.runData?.search_status}}</div>
+            <div class="searchTime searchDetail">{{search?.runData?.search_end_time ? search?.runData?.search_end_time : search?.runData?.search_start_time}}</div>
+            <div class="searchActions searchDetail">
+                <button type="button" (click)="onSelect(search)">
+                    Details
+                </button>
+                <button type="button" routerLink="/posts/{{search.name}}">
+                    Posts
+                </button>
+                <button type="button" (click)="startSearch(search.name)">
+                    Run
+                </button>
+            </div>
+        </li> 
+    </ul>
+    <div class="searchDetailsContainer">
+        <app-search-config-details [searchConfig]="selectedSearchConfig"></app-search-config-details>
+    </div>
+</div>

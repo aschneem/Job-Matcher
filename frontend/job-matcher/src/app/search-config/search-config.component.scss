@@ -1,0 +1,40 @@
+.completed{
+    color: green;
+    font-weight: bold;
+}
+
+.searchList {
+    min-width: 700px;
+}
+
+.searchEntry {
+    display: flex;
+    flex-direction: row;
+    justify-content: start;
+    align-items: start;
+    align-content: flex-start;
+}
+
+.searchContentContainer {
+    display: flex;
+    flex-direction: row;
+    justify-content: start;
+    align-items: start;
+    align-content: flex-start;
+}
+
+.searchName {
+    min-width: 200px;
+}
+
+.searchDetail {
+    padding-left: 10px;
+    padding-right: 10px;
+    padding-top: 2px;
+    padding-bottom: 2px;
+}
+
+.searchDetailsContainer {
+    max-width: 500px;
+    overflow-wrap: anywhere;
+}

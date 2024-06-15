@@ -1,0 +1,13 @@
+<div *ngIf='!!data || !!type'>
+    <div *ngIf='isDisplayType()'>
+        <h4>{{type}}</h4>
+        <ul class="pos_list">
+            <li class="pos_word" *ngFor="let word of getWords() | slice:0:min(getWords().length, maxDisplayed)">
+                {{word.text}} | {{word.lemma}}
+            </li>
+        </ul>
+        <button *ngIf="getWords().length > maxDisplayed" (click)="toggleShowAll()">
+            {{ showAll ? 'Show less' : 'Show all' }}
+        </button>
+    </div>  
+</div>

@@ -1,0 +1,19 @@
+.keyword_list{
+    display: flex;
+    flex-direction: row;
+    justify-content: start;
+    align-items: start;
+    align-content: flex-start;
+    padding: 3px;
+    flex-wrap: wrap;
+    width: 800px;
+}
+
+.keyword {
+    padding: 5px;
+    background-color: #222222;
+    color: #BBBBFF;
+    border-radius: 5px;
+    list-style: none;
+    margin: 8px;
+}

@@ -1,0 +1,10 @@
+<div *ngIf="entities">
+    <ul class="entity_list">
+        <li class="entity" *ngFor="let entity of entities | slice:0:min(entities.length, maxDisplayed)">
+            <span class='entity_text'>{{entity.text}}</span> | <span class="entity_label">{{entity.label}}</span>
+        </li>
+    </ul>
+    <button *ngIf="entities.length > maxDisplayed" (click)="toggleShowAll()">
+        {{ showAll ? 'Show less' : 'Show all' }}
+    </button>
+</div>  

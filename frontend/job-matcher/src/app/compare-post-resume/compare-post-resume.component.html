@@ -1,0 +1,28 @@
+<div class="compareComponentWrapper" *ngIf="data">
+    <div class="resumeInfo">
+        {{data.resume}}
+    </div>
+    <div class="postInfo">
+        <div><a href="{{data.postUrl}}">{{data.postTitle}}</a></div>
+        <div><a href="http://localhost:5000/jobpost/{{data.postID}}/view">Saved {{data.postID}} page</a></div>
+        <div>
+            <div>{{data.searchName}}</div>
+        </div>
+    </div>
+    <h3>Entities</h3>
+    <app-compare-section [compareData]="data.entities" />
+    <h3>Noun</h3>
+    <app-compare-section [compareData]="data.nounCompare" />
+    <h3>Proper Noun</h3>
+    <app-compare-section [compareData]="data.properNounCompare" />
+    <h3>Verb</h3>
+    <app-compare-section [compareData]="data.verbCompare" />
+    <h3>Adverb</h3>
+    <app-compare-section [compareData]="data.adverbCompare" />
+    <h3>Adjective</h3>
+    <app-compare-section [compareData]="data.adjectiveCompare" />
+    <h3>Text Rank</h3>
+    <app-compare-section [compareData]="data.textRankCompare" />
+    <h3>Rake</h3>
+    <app-compare-section [compareData]="data.rakeCompare" />
+</div>

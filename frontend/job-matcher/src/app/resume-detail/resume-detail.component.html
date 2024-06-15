@@ -1,0 +1,27 @@
+<div *ngIf="resume">
+    <h2>{{resume.name}} Details</h2>
+    <div>
+        <div *ngIf="resume?.entities">
+            <h5>Entities</h5>
+            <ul *ngFor="let entity of resume?.entities">
+                <li><span>{{entity.text}} {{entity.label}}</span></li>
+            </ul>
+        </div>  
+        <div *ngIf="resume?.pos_data">
+            <h5>Parts of Speach Data</h5>
+            <app-pos-component [data]='resume.pos_data' [type]="key" *ngFor="let key of getKeys(resume?.pos_data)"></app-pos-component>
+        </div>
+        <div *ngIf="resume?.text_rank">
+            <h5>Text Rank</h5>
+            <ul *ngFor="let keyword of resume?.text_rank">
+                <li><span>{{keyword.keyword}} {{keyword.score}}</span></li>
+            </ul>
+        </div>  
+        <div *ngIf="resume?.rakeResults">
+            <h5>Rake Results</h5>
+            <ul *ngFor="let keyword of resume?.rakeResults">
+                <li><span>{{keyword.keyword}} {{keyword.score}}</span></li>
+            </ul>
+        </div>  
+    </div>
+</div>

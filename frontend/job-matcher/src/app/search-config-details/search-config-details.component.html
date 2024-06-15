@@ -1,0 +1,23 @@
+<div *ngIf="searchConfig">
+    <h3>{{searchConfig.name | uppercase}} Details</h3>
+    <div *ngIf="searchConfig.runData">
+        <div>Status {{searchConfig.runData.search_status}}</div>
+        <div>Time {{searchConfig.runData.search_end_time ? searchConfig.runData.search_end_time : searchConfig.runData.search_start_time}}</div>
+    </div>
+    <div>
+        <div>URL: {{searchConfig.url}}</div>
+        <div>skip: {{searchConfig.skip}}</div>
+        <div>headless: {{searchConfig.headless}}</div>
+        <div *ngIf="searchConfig.extraDelay">extraDelay: {{searchConfig.extraDelay}}</div>
+    </div>
+    <div>
+        <div *ngIf="searchConfig.searchBoxGetBy">searchBoxGetBy: {{searchConfig.searchBoxGetBy}}</div>
+        <div *ngIf="searchConfig.searchBoxKey">searchBoxKey: {{searchConfig.searchBoxKey}}</div>
+        <div *ngIf="searchConfig.searchButtonGetBy">searchButtonGetBy: {{searchConfig.searchButtonGetBy}}</div>
+        <div *ngIf="searchConfig.searchButtonRole">searchButtonRole: {{searchConfig.searchButtonRole}}</div>
+        <div *ngIf="searchConfig.searchButtonKey">searchButtonKey: {{searchConfig.searchButtonKey}}</div>
+        <div *ngIf="searchConfig.searchButtonKeyExact">searchButtonKeyExact: {{searchConfig.searchButtonKeyExact}}</div>
+        <div *ngIf="searchConfig.jobPostsCSSSelector">jobPostsCSSSelector: {{searchConfig.jobPostsCSSSelector}}</div>
+        <div *ngIf="searchConfig.jobPostsContentCSSSelector">jobPostsContentCSSSelector: {{searchConfig.jobPostsContentCSSSelector}}</div>
+    </div>
+</div>

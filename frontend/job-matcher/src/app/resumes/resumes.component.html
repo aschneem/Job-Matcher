@@ -1,0 +1,13 @@
+<h2>Resumes</h2>
+<app-file-upload (fileUploaded)="uploadResume($event)"></app-file-upload>
+<ul class="resumes">
+    <li class="resume-item" *ngFor="let resume of resumes">
+        <button [class.selected]="resume === selectedResume" type="button" (click)="onSelect(resume)">
+            <span class="name">{{resume.name}}</span>
+        </button>
+        <button (click)="setDefault(resume.name)">
+            Set as Default
+        </button>
+    </li>   
+</ul>
+<app-resume-detail [resume]="selectedResume"></app-resume-detail>

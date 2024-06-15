@@ -1,0 +1,41 @@
+.jobPost {
+    display: flex;
+    flex-direction: row;
+    justify-content: start;
+    align-items: start;
+    align-content: flex-start;
+    padding: 3px;
+}
+
+.postTitle {
+    width: 300px;
+    overflow-wrap: anywhere;
+}
+
+.postSearch {
+    width: 250px;
+}
+
+.postSearchName {
+    width: 100px;
+}
+
+.postLink {
+    width: 350px;
+}
+
+.postTime {
+    max-width: 100px;
+}
+
+.postScore {
+    font-weight: bold;
+    width: 50px;
+    overflow: hidden;
+    padding-left: 10px;
+    padding-right: 10px;
+}
+
+.postActions {
+    padding-left: 10px;
+}

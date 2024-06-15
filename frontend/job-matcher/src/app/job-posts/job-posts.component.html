@@ -1,0 +1,68 @@
+<h2>Job Posts</h2>
+<div class="statusFilters">
+    <button type="button" (click)="getJobPostsByStatus('interested')">
+        Interested
+    </button>
+    <button type="button" (click)="getJobPostsByStatus('uninterested')">
+        Not Interested
+    </button>
+    <button type="button" (click)="getJobPostsByStatus('badCompensation')">
+        Compensation Too Low
+    </button>
+    <button type="button" (click)="getJobPostsByStatus('applied')">
+        Applied
+    </button>
+    <button type="button" (click)="getJobPostsByStatus('interview')">
+        Interview
+    </button>
+    <button type="button" (click)="getJobPostsByStatus('rejectApp')">
+        Rejected - Application
+    </button>
+    <button type="button" (click)="getJobPostsByStatus('rejectInterview')">
+        Rejected - Interview
+    </button>
+    <button type="button" (click)="getJobPostsByStatus('rejectOffer')">
+        Rejected - Offer
+    </button>
+</div>
+<ul class="jobPosts" >
+    <li class="jobPost" *ngFor="let post of posts">
+        <div class="postTitle"><a href={{post.url}} title={{post.postLink}}>{{post.postLink}}</a></div>
+        <div class="postSearch" *ngIf="post.search">{{post.search}}</div>
+        <div class="postSearchName" *ngIf="post.searchName">{{post.searchName}}</div>
+        <div class="postLink"><a href="http://localhost:5000/jobpost/{{post.contentID}}/view">{{post.contentID}}</a></div>
+        <div class="postTimestamp">{{post.timestamp}}</div>
+        <div class="postScore" *ngIf="appSettingsService.appSettings">{{post.match_data[appSettingsService.appSettings.matcher][appSettingsService.appSettings.resume]}}</div>
+        <div class="postActions"> 
+            <button [class.selected]="post === selectedPost" type="button" (click)="onSelect(post)">
+                <span class="name">Details</span>
+            </button>
+            <button type="button" (click)="updatePostStatus(post.contentID, 'interested')">
+                Interested
+            </button>
+            <button type="button" (click)="updatePostStatus(post.contentID, 'uninterested')">
+                Not Interested
+            </button>
+            <button type="button" (click)="updatePostStatus(post.contentID, 'badCompensation')">
+                Compensation Too Low
+            </button>
+            <button type="button" (click)="updatePostStatus(post.contentID, 'applied')">
+                Applied
+            </button>
+            <button type="button" (click)="updatePostStatus(post.contentID, 'interview')">
+                Interview
+            </button>
+            <button type="button" (click)="updatePostStatus(post.contentID, 'rejectApp')">
+                Rejected - Application
+            </button>
+            <button type="button" (click)="updatePostStatus(post.contentID, 'rejectInterview')">
+                Rejected - Interview
+            </button>
+            <button type="button" (click)="updatePostStatus(post.contentID, 'rejectOffer')">
+                Rejected - Offer
+            </button>
+            <a routerLink="/compare/{{post.contentID}}/{{appSettingsService.appSettings?.resume}}"> Compare </a>
+        </div>
+    </li>
+</ul>
+<app-job-post-details [post]="selectedPost"></app-job-post-details>

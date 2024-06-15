@@ -1,0 +1,5 @@
+<div class="upload-area" (dragover)="onDragOver($event)" (drop)="onDrop($event)">
+    <span> Drag and drop files here or </span>
+    <a href="javascript:void(0)" (click)="fileInput.click()">Click to select file</a>
+    <input type="file" #fileInput (change)="onFileChange($event)" style="display: none;" />
+</div>

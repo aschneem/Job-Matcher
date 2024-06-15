@@ -1,0 +1,16 @@
+kafka-python
+requests
+playwright
+pymongo
+python-rake
+PyPDF2
+scikit-learn
+spacy
+pdfkit
+fpdf
+flask[async]
+flask-cors
+pymongo
+wordhoard
+nltk
+gunicorn

@@ -1,0 +1,27 @@
+<div *ngIf="post">
+    <h2><a href="{{post.url}}">{{post.postLink}} Details</a></h2>
+    <div><a href="http://localhost:5000/jobpost/{{post.contentID}}/view">Saved {{post.contentID}} page</a></div>
+    <div>
+        <div>{{post.search}}</div>
+        <div>{{post.searchName}}</div>
+        <div>{{post.timestamp}}</div>
+    </div>
+    <div>
+        <div *ngIf="post?.entities">
+            <h5>Entities</h5>
+            <app-entity-display [entities]="post.entities"></app-entity-display>
+        </div>  
+        <div *ngIf="post?.pos_data">
+            <h5>Parts of Speach Data</h5>
+            <app-pos-component [data]='post.pos_data' [type]="key" *ngFor="let key of getKeys(post?.pos_data)"></app-pos-component>
+        </div>  
+        <div *ngIf="post?.text_rank">
+            <h5>Text Rank</h5>
+            <app-keyword-display [data]='post' key="text_rank"></app-keyword-display>
+        </div>  
+        <div *ngIf="post?.rakeResults">
+            <h5>Rake Results</h5>
+            <app-keyword-display [data]='post' key="rakeResults"></app-keyword-display>
+        </div>  
+    </div>
+</div>

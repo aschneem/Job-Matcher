@@ -1,0 +1,10 @@
+<div>
+    <ul class="keyword_list">
+        <li class="keyword" *ngFor="let keyword of getKeywords() | slice:0:min(getKeywords().length, maxDisplayed)">
+            {{keyword.keyword}} | {{truncate(keyword.score)}}
+        </li>
+    </ul>
+    <button *ngIf="getKeywords().length > maxDisplayed" (click)="toggleShowAll()">
+        {{ showAll ? 'Show less' : 'Show all' }}
+    </button>
+</div>  
