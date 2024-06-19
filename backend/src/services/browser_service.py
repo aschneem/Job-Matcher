@@ -65,6 +65,8 @@ class BrowserService():
                     await self.execute_action(loop_action, run_id, element)
         elif action['action'] == 'Evaluate':
             await self.evaluate(action, run_id, context)
+        elif action['action'] == 'Back':
+            await self.go_back(run_id)
         else:
             raise NotImplementedError()
 
@@ -90,6 +92,10 @@ class BrowserService():
         target = await self.get_target_element(action, run_id, context)
         await target.evaluate(action['actionValue'])
 
+    async def go_back(self, run_id):
+        """navigates the browser back to the previous page"""
+        await self.pages[run_id].go_back()
+
     async def get_target_element(self, action, run_id, context):
         """Get the target element for an action"""
         get_by = action['targetGetBy']
@@ -99,15 +105,9 @@ class BrowserService():
                                           name=self.get_target_key(action),
                                           exact=action.get('targetKeyExact', False))
         elif get_by == 'placeholder':
-            return await page.get_by_placeholder(self.get_target_key(action),
+            return page.get_by_placeholder(self.get_target_key(action),
                                                  exact=action.get('targetKeyExact', False))
         elif get_by == 'css':
-            locator = page.locator('css=' + action['targetKey'])
-            print(locator)
-            print(await locator.count())
-            nodes = locator.all()
-            nodes = await nodes
-            print(nodes)
             return await page.locator('css='+action['targetKey']).all()
         elif get_by == 'label':
             return await page.get_by_label(self.get_target_key(action),
