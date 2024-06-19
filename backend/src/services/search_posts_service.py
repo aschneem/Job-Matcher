@@ -125,15 +125,15 @@ class SearchPostsService():
             post_content = self.page.locator("css="+config['jobPostsContentCSSSelector'])
             try:
                 locator_count = await post_content.count()
+                print(locator_count)
             except Exception:
                 await self.go_back_to_results(config)
                 print('Error finding text')
                 continue
-            if not locator_count == 1:
-                await self.go_back_to_results(config)
-                print('Text found at ' + str(locator_count) + 'locations')
-                continue
-            text = await post_content.text_content()
+            text = ''
+            for post_content_section in await post_content.all():
+                text = text + '\n' + await post_content_section.text_content()
+            text = text .strip()
             html = "<html><body>" + await post_content.inner_html() + "</body></html>"
             content_id = self.post_repo.sha1_value(self.post_repo.normalize(text))
             print(content_id)

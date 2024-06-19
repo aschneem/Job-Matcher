@@ -14,7 +14,7 @@ create the virtual environment
 
 Activate the virtual environment using the appropriate script type for your environment in the venv/Scripts folder created by venv command
 ```
-pip install --no-cache-dir -r requirements.txt
+pip install -r requirements.txt
 python -m spacy download en_core_web_sm
 python -m playwright install
 ```
