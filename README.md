@@ -14,7 +14,7 @@ create the virtual environment
 
 Activate the virtual environment using the appropriate script type for your environment in the venv/Scripts folder created by venv command
 ```
-pip install --no-cache-dir -r requirements.txt
+pip install -r requirements.txt
 python -m spacy download en_core_web_sm
 python -m playwright install
 ```
@@ -100,3 +100,5 @@ These are somethings that I have on my mind about wanting to do in the future wi
 8. Make the application more configurable and easier to configure from the UI
 9. Add actual logging
 10. Create and save better metrics about searches to make it easier to determine if they are working as intended
+11. Create a Google Apps Script web app to inspect emails about applications to automate tracking
+12. Improve deduplication of job posts beyond the exact content match
