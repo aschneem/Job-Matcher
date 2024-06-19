@@ -59,12 +59,14 @@ class BrowserService():
         elif action['action'] == 'Loop':
             print('in loop')
             elements = await self.get_target_element(action, run_id, context)
-            print(await elements.all())
-            for element in await elements.all():
-                print('element')
+            print(elements)
+            for element in elements:
                 for loop_action in action['loopActions']:
-                    print('loop_actions')
-                    self.execute_action(loop_action, run_id, element)
+                    await self.execute_action(loop_action, run_id, element)
+        elif action['action'] == 'Evaluate':
+            await self.evaluate(action, run_id, context)
+        else:
+            raise NotImplementedError()
 
     async def navigate(self, action, run_id):
         """Navigate the page to a URL"""
@@ -83,6 +85,11 @@ class BrowserService():
         target = await self.get_target_element(action, run_id, context)
         await target.fill(action['actionValue'])
 
+    async def evaluate(self, action, run_id, context):
+        """Evaluates JS code on the context of the target element"""
+        target = await self.get_target_element(action, run_id, context)
+        await target.evaluate(action['actionValue'])
+
     async def get_target_element(self, action, run_id, context):
         """Get the target element for an action"""
         get_by = action['targetGetBy']
@@ -95,7 +102,13 @@ class BrowserService():
             return await page.get_by_placeholder(self.get_target_key(action),
                                                  exact=action.get('targetKeyExact', False))
         elif get_by == 'css':
-            return page.locator('css='+action['targetKey'])
+            locator = page.locator('css=' + action['targetKey'])
+            print(locator)
+            print(await locator.count())
+            nodes = locator.all()
+            nodes = await nodes
+            print(nodes)
+            return await page.locator('css='+action['targetKey']).all()
         elif get_by == 'label':
             return await page.get_by_label(self.get_target_key(action),
                                            exact=action.get('targetKeyExact', False))
@@ -130,22 +143,16 @@ class BrowserService():
 
     async def get_value(self, action, value_name, run_id, context):
         """Gets the specified value"""
-        target = self.get_target_element(action, run_id, context)
         if value_name == '{}':
             return {}
         if value_name == '[]':
             return []
+        target = await self.get_target_element(action, run_id, context)
         if action['targetGetBy'] == 'result':
             return target[value_name]
         else:
             if value_name == 'text_content':
-                text = ''
-                for element in await target.all():
-                    text = text + '\n' + await element.text_content()
-                return text.strip()
+                return await target.text_content()
             elif value_name == 'inner_html':
-                html = '<html><body>'
-                for element in await target.all():
-                    html = html + '\n' + await element.inner_html()
-                return html + '</body></html>'
+                return await target.inner_html()
             raise NotImplementedError()
