@@ -131,10 +131,12 @@ class SearchPostsService():
                 print('Error finding text')
                 continue
             text = ''
+            html = '<html><body>'
             for post_content_section in await post_content.all():
                 text = text + '\n' + await post_content_section.text_content()
+                html = html + await post_content_section.inner_html()
             text = text .strip()
-            html = "<html><body>" + await post_content.inner_html() + "</body></html>"
+            html = html + "</body></html>"
             content_id = self.post_repo.sha1_value(self.post_repo.normalize(text))
             print(content_id)
             print(self.post_repo.post_exists(content_id))
