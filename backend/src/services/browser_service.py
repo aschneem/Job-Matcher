@@ -52,14 +52,17 @@ class BrowserService():
             await self.click(action, run_id, context)
         elif action['action'] == 'Fill':
             await self.fill(action, run_id, context)
+        elif action['action'] == 'Press':
+            await self.press(action, run_id, context)
         elif action['action'] == 'Sleep':
             sleep(action['actionValue'])
         elif action['action'] == 'SetResult':
             await self.set_result(action, run_id, context)
         elif action['action'] == 'Loop':
-            print('in loop')
             elements = await self.get_target_element(action, run_id, context)
-            print(elements)
+            loop_max = action.get('actionValue', '')
+            if len(str(loop_max)) > 0:
+                elements = elements[0:int(loop_max)]
             for element in elements:
                 for loop_action in action['loopActions']:
                     await self.execute_action(loop_action, run_id, element)
@@ -74,7 +77,7 @@ class BrowserService():
         """Navigate the page to a URL"""
         url = action.get('targetKey', '')
         if 'actionValue' in action.keys():
-            url = url.format(action['actionValue'])
+            url = url.replace('{search}', action['actionValue'])
         await self.pages[run_id].goto(url)
 
     async def click(self, action, run_id, context):
@@ -86,6 +89,11 @@ class BrowserService():
         """Fill the target input with the action value"""
         target = await self.get_target_element(action, run_id, context)
         await target.fill(action['actionValue'])
+
+    async def press(self, action, run_id, context):
+        """Press the indicated key"""
+        target = await self.get_target_element(action, run_id, context)
+        await target.press(action['actionValue'])
 
     async def evaluate(self, action, run_id, context):
         """Evaluates JS code on the context of the target element"""
@@ -101,7 +109,7 @@ class BrowserService():
         get_by = action['targetGetBy']
         page = self.pages[run_id]
         if get_by == 'role':
-            return await page.get_by_role(action['targetRole'],
+            return page.get_by_role(action['targetRole'],
                                           name=self.get_target_key(action),
                                           exact=action.get('targetKeyExact', False))
         elif get_by == 'placeholder':
@@ -110,10 +118,10 @@ class BrowserService():
         elif get_by == 'css':
             return await page.locator('css='+action['targetKey']).all()
         elif get_by == 'label':
-            return await page.get_by_label(self.get_target_key(action),
+            return page.get_by_label(self.get_target_key(action),
                                            exact=action.get('targetKeyExact', False))
         elif get_by == 'text':
-            return await page.get_by_text(self.get_target_key(action),
+            return page.get_by_text(self.get_target_key(action),
                                           exact=action.get('targetKeyExact', False))
         elif get_by == 'result':
             return self.results[run_id]
@@ -155,4 +163,6 @@ class BrowserService():
                 return await target.text_content()
             elif value_name == 'inner_html':
                 return await target.inner_html()
+            elif value_name == 'url':
+                return self.pages[run_id].url
             raise NotImplementedError()
