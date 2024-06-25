@@ -90,7 +90,7 @@ Job posts are added by running searches. Eventually, I think it would be good to
 
 ## Future Roadmap Items
 These are somethings that I have on my mind about wanting to do in the future with this project. Note that this doesn't mean that these features will be coming particularly soon or that I will be working on them in any particular order.
-1. Seperate out browser interaction from the search service and create a browser service to run scripts and build output that can be invoked and then processed by the search service instead.
+1. Separate out browser interaction from the search service and create a browser service to run scripts and build output that can be invoked and then processed by the search service instead.
 2. Give the UI some love. Make proper use of variable in the CSS and look at properly styling somethings. Additionally, just improve the overall readability and usability
 3. Make use of the separated out browser service to allow for the creation of scripts to automate submitting applications
 4. Create a browser extension to allow for saving more bespoke posts if creating a search seems overkill
