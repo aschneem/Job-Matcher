@@ -12,6 +12,7 @@ from matchers.keyword_vector_matcher import KeywordVectorMatcher
 from matchers.tfidf_matcher import TfIdfMatcher
 from matchers.pos_vector_matcher import PosVectorMatcher
 from services.analyzer_service import AnalyzerService
+from services.browser_service import BrowserService
 from services.compare_resume_post_service import CompareResumePostService
 from services.resume_service import ResumeService
 from services.search_posts_service import SearchPostsService
@@ -39,8 +40,10 @@ matcher = MatcherEngine(
     post_repo,
     resume_repo)
 analyzer_service = AnalyzerService()
+browser_service = BrowserService()
 resume_service = ResumeService(analyzer_service, matcher, resume_repo, SynonymService())
-search_service = SearchPostsService(search_repo, post_repo, resume_repo, matcher, analyzer_service)
+search_service = SearchPostsService(search_repo, post_repo, resume_repo, matcher,
+                                     analyzer_service, browser_service)
 compare_service = CompareResumePostService(post_repo, resume_repo)
 
 MAX_FILE_SIZE = 2

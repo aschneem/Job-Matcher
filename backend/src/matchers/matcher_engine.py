@@ -15,12 +15,12 @@ class MatcherEngine():
                 return matcher.get_matcher_name()
         return self.matchers[0].get_matcher_name()
 
-    def run(self):
+    def run(self, status=None):
         """Runs all matchers against all posts and resume combinations"""
         for matcher in self.matchers:
             matcher.initialize()
         resume_data = self.resume_repository.get_all_resumes()
-        post_data = self.post_repository.get_all_posts_for_matcher()
+        post_data = self.post_repository.get_all_posts_for_matcher(status)
         for post in post_data:
             scores = {}
             for matcher in self.matchers:

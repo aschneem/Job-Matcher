@@ -33,10 +33,14 @@ class JobPostRepository():
             del post['_id']
             result.append(post)
         return result
-    
-    def get_all_posts_for_matcher(self):
+
+    def get_all_posts_for_matcher(self, status=None):
+        """Get all posts for matching"""
         result = []
-        cursor = self.collection.find()
+        query = {}
+        if status:
+            query['status'] = status
+        cursor = self.collection.find(query)
         for post in cursor:
             del post['_id']
             result.append(post)
