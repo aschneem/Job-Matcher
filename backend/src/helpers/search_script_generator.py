@@ -23,27 +23,30 @@ def add_search_to_script_actions(search, actions, keyword):
                         'targetRole': search.get('searchButtonRole', ''),
                         'targetKeyExact': search.get('searchButtonKeyExact', False)})
         actions.append({'action': 'Sleep', 'actionValue': 1})
-        for content_filter in search.get('filters', []):
-            actions.append({'action': 'Click', 'targetGetBy': content_filter['get_by'],
+    print('Filters')
+    print(search.get('filters', []))
+    for content_filter in search.get('filters', []):
+        print(content_filter)
+        actions.append({'action': 'Click', 'targetGetBy': content_filter['getBy'],
+                        'targetKey': content_filter['key'],
+                        'targetKeyType': content_filter.get('type', 'string'),
+                        'targetKeyExact': content_filter.get('keyExact', False),
+                        'targetRole': content_filter.get('role', '')})
+        if 'fill' in content_filter.keys():
+            actions.append({'action': 'Fill', 'actionValue': content_filter['fill'],
+                            'targetGetBy': content_filter['getBy'],
                             'targetKey': content_filter['key'],
                             'targetKeyType': content_filter.get('type', 'string'),
                             'targetKeyExact': content_filter.get('keyExact', False),
                             'targetRole': content_filter.get('role', '')})
-            if 'fill' in content_filter.keys():
-                actions.append({'action': 'Fill', 'actionValue': content_filter['fill'],
-                                'targetGetBy': content_filter['get_by'],
-                                'targetKey': content_filter['key'],
-                                'targetKeyType': content_filter.get('type', 'string'),
-                                'targetKeyExact': content_filter.get('keyExact', False),
-                                'targetRole': content_filter.get('role', '')})
-                actions.append({'action': 'Fill', 'actionValue': 'Tab',
-                                'targetGetBy': content_filter['get_by'],
-                                'targetKey': content_filter['key'],
-                                'targetKeyType': content_filter.get('type', 'string'),
-                                'targetKeyExact': content_filter.get('keyExact', False),
-                                'targetRole': content_filter.get('role', '')})
-            actions.append({'action': 'Sleep', 'actionValue': 1})
-        actions.append({'action': 'Sleep', 'actionValue': 5})
+            actions.append({'action': 'Press', 'actionValue': 'Tab',
+                            'targetGetBy': content_filter['getBy'],
+                            'targetKey': content_filter['key'],
+                            'targetKeyType': content_filter.get('type', 'string'),
+                            'targetKeyExact': content_filter.get('keyExact', False),
+                            'targetRole': content_filter.get('role', '')})
+        actions.append({'action': 'Sleep', 'actionValue': 1})
+    actions.append({'action': 'Sleep', 'actionValue': 5})
     add_crawl_results_to_actions(search, actions)
 
 def add_crawl_results_to_actions(search, actions):
@@ -94,6 +97,7 @@ def add_crawl_results_to_actions(search, actions):
 
 def convert_search_to_script(search, keywords):
     """Converts the given search configuration to a browser service script"""
+    print("BUILDING SCRIPT")
     script = { 'name': search['name'] }
     actions = []
     actions.append({'action': 'Nav', 'actionValue': '', 'targetKey': search['url']})
@@ -108,4 +112,8 @@ def convert_search_to_script(search, keywords):
     else:
         add_crawl_results_to_actions(search, actions)
     script['actions'] = actions
+    script['headless'] = search['headless']
+    print(search)
+    print(script)
+    print('SCRIPT COMPLETE')
     return script

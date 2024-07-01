@@ -131,7 +131,7 @@ class BrowserService():
 
     def get_target_key(self, action):
         """Gets the appropriate value to use as the target key"""
-        if action.get('targetKeyType', 'string') == 'RegEx':
+        if action.get('targetKeyType', 'string') == 're':
             return re.compile(action['targetKey'])
         return action['targetKey']
 
