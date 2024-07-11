@@ -1,0 +1,38 @@
+<div class="actionContainer">
+    <div class="field">
+        <label>Action:</label>
+        <select>
+            <option *ngFor="let actionType of ActionType | keyvalue" [value]="option.value">
+                {{ option.key }}
+            </option>
+        </select>
+    </div>
+    <div class="field">
+        <label>Action value:</label>
+        <input type="text" />
+    </div>  
+    <div class="field">
+        <label>Target key:</label>
+        <input type="text" />
+    </div> 
+    <div class="field">
+        <label>Target get by:</label>
+        <input type="text" />
+    </div>  
+    <div class="field">
+        <label>Target role:</label>
+        <input type="text" />
+    </div> 
+    <div class="field">
+        <label>Target key exact:</label>
+        <input type="checkbox" />
+    </div> 
+    <div class="field">
+        <label>Target key type:</label>
+        <select>
+            <option *ngFor="let keyType of KeyType | keyvalue" [value]="option.value">
+                {{ option.key }}
+            </option>
+        </select>
+    </div>
+</div>

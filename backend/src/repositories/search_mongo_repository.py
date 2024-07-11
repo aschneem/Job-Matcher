@@ -39,3 +39,8 @@ class SearchRepository():
         """Save data about the run of a particular search"""
         return self.collection.update_one({'name': name},
                                           {'$set' : {'runData': data}}).modified_count > 0
+
+    def update_search(self, name, search):
+        """Update a search"""
+        return self.collection.update_one({'name': name},
+                                           {'$set' : search}).modified_count > 0

@@ -1,6 +1,7 @@
 """Flask App"""
 from threading import Thread
 import json
+import helpers.search_script_generator
 from flask import Flask, request, abort, send_file, jsonify
 from flask_cors import cross_origin
 from repositories.job_post_mongo_repository import JobPostRepository
@@ -148,6 +149,39 @@ def compare(post_id, resume_name):
     """Get comparison data between a post and resume"""
     return compare_service.compare(resume_name, post_id)
 
+@app.route("/script")
+@cross_origin()
+def get_all_scripts():
+    """Get all scripts"""
+    return script_repo.get_scripts()
+
+@app.route("/script/<name>")
+@cross_origin()
+def get_script(name):
+    """Handles actions on a specific script"""
+    if request.method == "GET":
+        return script_repo.get_script(name)
+    elif request.method == "POST":
+        script_data = request.get_json()
+        if script_data:
+            script_repo.update_script(name, script_data)
+            return script_data
+        else:
+            abort(400, "Missing Script")
+    else:
+        abort(400, "Unhandled method")
+
+@app.route("/search/<name>/convert")
+@cross_origin()
+def convert_search_to_script(name):
+    """Convert the search configuration to use a generated 
+    search script that could later be modified"""
+    search = search_repo.get_search_config(name)
+    script = helpers.search_script_generator.convert_search_to_script(search,
+                ['software architect', 'lead software engineer', 'engineering manager'])
+    search['scriptName'] = script['name']
+    search_repo.update_search(name, search)
+    return search
 
 @app.route("/search")
 @cross_origin()
