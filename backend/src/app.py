@@ -5,6 +5,7 @@ from flask import Flask, request, abort, send_file, jsonify
 from flask_cors import cross_origin
 from repositories.job_post_mongo_repository import JobPostRepository
 from repositories.resume_mongo_repository import ResumeRepository
+from repositories.script_mongo_repository import ScriptRepository
 from repositories.search_mongo_repository import SearchRepository
 from matchers.entity_matcher import EntityMatcher
 from matchers.matcher_engine import MatcherEngine
@@ -24,6 +25,7 @@ app = Flask(__name__)
 post_repo = JobPostRepository()
 resume_repo = ResumeRepository()
 search_repo = SearchRepository()
+script_repo = ScriptRepository()
 
 matcher = MatcherEngine(
     [
@@ -43,7 +45,7 @@ analyzer_service = AnalyzerService()
 browser_service = BrowserService()
 resume_service = ResumeService(analyzer_service, matcher, resume_repo, SynonymService())
 search_service = SearchPostsService(search_repo, post_repo, resume_repo, matcher,
-                                     analyzer_service, browser_service)
+                                     analyzer_service, browser_service, script_repo)
 compare_service = CompareResumePostService(post_repo, resume_repo)
 
 MAX_FILE_SIZE = 2

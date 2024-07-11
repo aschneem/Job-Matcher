@@ -7,6 +7,7 @@ from helpers import search_script_generator
 from matchers.matcher_engine import MatcherEngine
 from repositories.job_post_mongo_repository import JobPostRepository
 from repositories.resume_mongo_repository import ResumeRepository
+from repositories.script_mongo_repository import ScriptRepository
 from repositories.search_mongo_repository import SearchRepository
 from services.analyzer_service import AnalyzerService
 from services.browser_service import BrowserService
@@ -16,12 +17,14 @@ class SearchPostsService():
 
     def __init__(self, search_repo: SearchRepository, post_repo: JobPostRepository,
                  resume_repo: ResumeRepository,
-                 matcher: MatcherEngine, analyzer: AnalyzerService,
-                 browser_service: BrowserService):
+                 matcher: MatcherEngine, analyzer: AnalyzerService, 
+                 browser_service: BrowserService,
+                 script_repo: ScriptRepository):
         self.analyzer = analyzer
         self.search_repo = search_repo
         self.post_repo = post_repo
         self.resume_repo = resume_repo
+        self.script_repo = script_repo
         self.matcher = matcher
         self.browser_service = browser_service
 
@@ -45,9 +48,15 @@ class SearchPostsService():
             return
         asyncio.run(self.search_for_posts_async(config, search_keywords))
 
+    def get_script_for_search(self, config, search_keywords):
+        """Gets a search script for the search configuration"""
+        if 'searchScript' in config:
+            return self.script_repo.get_script(config['searchScript'])
+        return search_script_generator.convert_search_to_script(config, search_keywords)
+
     async def search_for_posts_async(self, config, search_keywords):
         """Starts an async playwright instance and performs the search with it"""
-        script = search_script_generator.convert_search_to_script(config, search_keywords)
+        script = self.get_script_for_search(config, search_keywords)
         self.search_repo.save_search_run_data(config['name'],
                                                   {"search_status": "start",
                                                    'search_start_time': str(datetime.now())})
