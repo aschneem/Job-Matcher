@@ -28,6 +28,10 @@ export class SearchService {
     return this.http.get<StartSearchResponse>(environment.apiHost + "/search/run");
   }
 
+  convertToScript(name: string): Observable<SearchConfig> {
+    return this.http.get<SearchConfig>(environment.apiHost + "/search/" + name + "/convert");
+  }
+
   uploadSearch(file: File): Observable<SearchConfig> {
     const data = new FormData();
     data.append('file', file, file.name);

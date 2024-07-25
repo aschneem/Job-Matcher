@@ -8,6 +8,7 @@ export interface SearchConfig {
     searchButtonRole?: string,
     searchButtonKey?: string,
     searchButtonKeyExact?: boolean,
+    searchScript: string,
     jobPostsCSSSelector: string,
     jobPostsContentCSSSelector: string,
     headless: boolean,

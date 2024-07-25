@@ -35,6 +35,12 @@ export class SearchConfigComponent {
       .subscribe(searches => this.searches = searches);
   }
 
+  convertToScriptSearch(name: string): void{
+    this.searchService.convertToScript(name).subscribe(
+      response => console.log(response)
+    );
+  }
+
   startSearch(name: string): void {
     this.searchService.runSearchConfig(name).subscribe(
       response => console.log(response)

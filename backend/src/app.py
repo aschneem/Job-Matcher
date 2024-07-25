@@ -1,10 +1,12 @@
 """Flask App"""
 from threading import Thread
 import json
+import helpers.search_script_generator
 from flask import Flask, request, abort, send_file, jsonify
 from flask_cors import cross_origin
 from repositories.job_post_mongo_repository import JobPostRepository
 from repositories.resume_mongo_repository import ResumeRepository
+from repositories.script_mongo_repository import ScriptRepository
 from repositories.search_mongo_repository import SearchRepository
 from matchers.entity_matcher import EntityMatcher
 from matchers.matcher_engine import MatcherEngine
@@ -12,6 +14,7 @@ from matchers.keyword_vector_matcher import KeywordVectorMatcher
 from matchers.tfidf_matcher import TfIdfMatcher
 from matchers.pos_vector_matcher import PosVectorMatcher
 from services.analyzer_service import AnalyzerService
+from services.browser_service import BrowserService
 from services.compare_resume_post_service import CompareResumePostService
 from services.resume_service import ResumeService
 from services.search_posts_service import SearchPostsService
@@ -23,6 +26,7 @@ app = Flask(__name__)
 post_repo = JobPostRepository()
 resume_repo = ResumeRepository()
 search_repo = SearchRepository()
+script_repo = ScriptRepository()
 
 matcher = MatcherEngine(
     [
@@ -39,8 +43,10 @@ matcher = MatcherEngine(
     post_repo,
     resume_repo)
 analyzer_service = AnalyzerService()
+browser_service = BrowserService()
 resume_service = ResumeService(analyzer_service, matcher, resume_repo, SynonymService())
-search_service = SearchPostsService(search_repo, post_repo, resume_repo, matcher, analyzer_service)
+search_service = SearchPostsService(search_repo, post_repo, resume_repo, matcher,
+                                     analyzer_service, browser_service, script_repo)
 compare_service = CompareResumePostService(post_repo, resume_repo)
 
 MAX_FILE_SIZE = 2
@@ -143,6 +149,40 @@ def compare(post_id, resume_name):
     """Get comparison data between a post and resume"""
     return compare_service.compare(resume_name, post_id)
 
+@app.route("/script")
+@cross_origin()
+def get_all_scripts():
+    """Get all scripts"""
+    return script_repo.get_scripts()
+
+@app.route("/script/<name>", methods=["GET", "POST"])
+@cross_origin()
+def get_script(name):
+    """Handles actions on a specific script"""
+    if request.method == "GET":
+        return script_repo.get_script(name)
+    elif request.method == "POST":
+        script_data = request.get_json()
+        if script_data:
+            script_repo.update_script(name, script_data)
+            return script_data
+        else:
+            abort(400, "Missing Script")
+    else:
+        abort(400, "Unhandled method")
+
+@app.route("/search/<name>/convert")
+@cross_origin()
+def convert_search_to_script(name):
+    """Convert the search configuration to use a generated 
+    search script that could later be modified"""
+    search = search_repo.get_search_config(name)
+    script = helpers.search_script_generator.convert_search_to_script(search,
+                ['software architect', 'lead software engineer', 'engineering manager'])
+    search['scriptName'] = script['name']
+    search_repo.update_search(name, search)
+    script_repo.save_script(script['name'], script)
+    return search
 
 @app.route("/search")
 @cross_origin()
