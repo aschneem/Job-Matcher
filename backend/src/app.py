@@ -155,7 +155,7 @@ def get_all_scripts():
     """Get all scripts"""
     return script_repo.get_scripts()
 
-@app.route("/script/<name>")
+@app.route("/script/<name>", methods=["GET", "POST"])
 @cross_origin()
 def get_script(name):
     """Handles actions on a specific script"""
@@ -181,6 +181,7 @@ def convert_search_to_script(name):
                 ['software architect', 'lead software engineer', 'engineering manager'])
     search['scriptName'] = script['name']
     search_repo.update_search(name, search)
+    script_repo.save_script(script['name'], script)
     return search
 
 @app.route("/search")
